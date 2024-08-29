@@ -34,17 +34,15 @@ const activePlayer0: HTMLParagraphElement | null =
 const activePlayer1: HTMLParagraphElement | null =
   document.querySelector(`.player.player--1`);
 
-// actual Score for player 1
-const actualScore0: HTMLParagraphElement | null =
-  document.querySelector('.score#score--0');
-
-// actual Score for player 2
-const actualScore1: HTMLParagraphElement | null =
-  document.querySelector('.score#score--1');
-
 // function to update actual score
-const updateActualScore = (actualScore: number) =>
-  actualScore0 && (actualScore0.textContent = String(actualScore));
+const updateActualScore = (actualScore: number, player: number) => {
+  const actualScoreElement: HTMLParagraphElement | null =
+    document.querySelector(`.score#score--${player}`);
+
+  return (
+    actualScoreElement && (actualScoreElement.textContent = String(actualScore))
+  );
+};
 
 // function to update current score
 const updateCurrentScore = (currScore: number) =>
@@ -80,7 +78,6 @@ if (rollDiceButton) {
     if (diceImage) {
       if (activePlayer0?.classList.contains(`player--active`)) {
         currentScorePlayer1 += initiateRandomNum;
-        // Check if the element was found
 
         currentScore0 &&
           (currentScore0.textContent = String(currentScorePlayer1));
@@ -92,7 +89,7 @@ if (rollDiceButton) {
           // add current score to actual score
           actualScorePlayer1 += currentScorePlayer1;
           // update actual score
-          updateActualScore(actualScorePlayer1);
+          updateActualScore(actualScorePlayer1, 0);
 
           // initialize current score back to 0
           currentScorePlayer1 = 0;
@@ -105,10 +102,9 @@ if (rollDiceButton) {
         addActivePlayer(activePlayer1);
         const initiateRandomNum: number = getRandomInt(1, 6);
         currentScorePlayer2 += initiateRandomNum;
-        if (currentScore1) {
-          // Access or manipulate the selected element here
-          currentScore1.textContent = String(currentScorePlayer1);
-        }
+        currentScore1 &&
+          (currentScore1.textContent = String(currentScorePlayer2));
+
         if (initiateRandomNum === 1) {
           removeActivePlayer(activePlayer1);
           diceImage.setAttribute('src', 'dice-1.png');
@@ -116,7 +112,7 @@ if (rollDiceButton) {
           // add current score to actual score
           actualScorePlayer2 += currentScorePlayer2;
           // update actual score
-          updateActualScore(actualScorePlayer2);
+          updateActualScore(actualScorePlayer2, 1);
 
           // initialize current score back to 0
           currentScorePlayer2 = 0;
