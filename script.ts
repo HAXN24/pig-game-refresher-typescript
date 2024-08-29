@@ -229,10 +229,7 @@ if (newGameButton) {
     activePlayer1?.classList.remove('player--winner');
     activePlayer2?.classList.remove('player--winner');
 
-    if (activePlayer1?.classList.contains('player--active')) {
-      removeActivePlayer(activePlayer1);
-      addActivePlayer(activePlayer2);
-    } else if (activePlayer2?.classList.contains('player--active')) {
+    if (activePlayer2?.classList.contains('player--active')) {
       removeActivePlayer(activePlayer2);
       addActivePlayer(activePlayer1);
     }

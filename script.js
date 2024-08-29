@@ -169,11 +169,7 @@ if (newGameButton) {
         resetScores(2);
         activePlayer1 === null || activePlayer1 === void 0 ? void 0 : activePlayer1.classList.remove('player--winner');
         activePlayer2 === null || activePlayer2 === void 0 ? void 0 : activePlayer2.classList.remove('player--winner');
-        if (activePlayer1 === null || activePlayer1 === void 0 ? void 0 : activePlayer1.classList.contains('player--active')) {
-            removeActivePlayer(activePlayer1);
-            addActivePlayer(activePlayer2);
-        }
-        else if (activePlayer2 === null || activePlayer2 === void 0 ? void 0 : activePlayer2.classList.contains('player--active')) {
+        if (activePlayer2 === null || activePlayer2 === void 0 ? void 0 : activePlayer2.classList.contains('player--active')) {
             removeActivePlayer(activePlayer2);
             addActivePlayer(activePlayer1);
         }
