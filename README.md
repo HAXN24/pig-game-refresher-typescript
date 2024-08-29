@@ -1,1 +1,2 @@
-"# pig-game-refresher-typescript" 
+"# pig-game-refresher-typescript"
+Typescript practice project 
