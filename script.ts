@@ -218,7 +218,7 @@ if (holdButton) {
   });
 }
 
-// new game logic
+// new game logic (must always start with player 1)
 const newGameButton: HTMLButtonElement | null =
   document.querySelector('.btn--new');
 
