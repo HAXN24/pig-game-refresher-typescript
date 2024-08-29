@@ -148,6 +148,9 @@ if (holdButton) {
                 winner(activePlayer1);
                 // reset other player scores to zero
                 resetScores(2);
+                // disable hold and roll dice input
+                holdButton && (holdButton.disabled = true);
+                rollDiceButton && (rollDiceButton.disabled = true);
             }
         }
         else {
@@ -157,16 +160,24 @@ if (holdButton) {
                 winner(activePlayer2);
                 // reset other player scores to zero
                 resetScores(1);
+                // disable hold and roll dice input
+                holdButton && (holdButton.disabled = true);
+                rollDiceButton && (rollDiceButton.disabled = true);
             }
         }
     });
 }
-// new game logic
+// new game logic (must always start with player 1)
 const newGameButton = document.querySelector('.btn--new');
 if (newGameButton) {
     newGameButton.addEventListener(`click`, () => {
+        // reset scores to zero
         resetScores(1);
         resetScores(2);
+        // enable hold and roll dice input
+        holdButton && (holdButton.disabled = false);
+        rollDiceButton && (rollDiceButton.disabled = false);
+        // reset active player css colors
         activePlayer1 === null || activePlayer1 === void 0 ? void 0 : activePlayer1.classList.remove('player--winner');
         activePlayer2 === null || activePlayer2 === void 0 ? void 0 : activePlayer2.classList.remove('player--winner');
         if (activePlayer2 === null || activePlayer2 === void 0 ? void 0 : activePlayer2.classList.contains('player--active')) {

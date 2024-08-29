@@ -203,6 +203,9 @@ if (holdButton) {
         winner(activePlayer1);
         // reset other player scores to zero
         resetScores(2);
+        // disable hold and roll dice input
+        holdButton && (holdButton.disabled = true);
+        rollDiceButton && (rollDiceButton.disabled = true);
       }
     } else {
       scoreLogicHoldButton(2);
@@ -213,6 +216,9 @@ if (holdButton) {
 
         // reset other player scores to zero
         resetScores(1);
+        // disable hold and roll dice input
+        holdButton && (holdButton.disabled = true);
+        rollDiceButton && (rollDiceButton.disabled = true);
       }
     }
   });
@@ -224,8 +230,15 @@ const newGameButton: HTMLButtonElement | null =
 
 if (newGameButton) {
   newGameButton.addEventListener(`click`, (): void => {
+    // reset scores to zero
     resetScores(1);
     resetScores(2);
+
+    // enable hold and roll dice input
+    holdButton && (holdButton.disabled = false);
+    rollDiceButton && (rollDiceButton.disabled = false);
+
+    // reset active player css colors
     activePlayer1?.classList.remove('player--winner');
     activePlayer2?.classList.remove('player--winner');
 
