@@ -68,9 +68,20 @@ const removeActivePlayer = (active: HTMLParagraphElement | null) =>
 const addActivePlayer = (active: HTMLParagraphElement | null) =>
   active && active.classList.add(`player--active`);
 
-// object variable for player 1 scores
+//  interface for an individual player's score
+interface PlayerScore {
+  current: number;
+  actual: number;
+}
 
-const playerScores = {
+// Define an interface for the overall scores object
+interface PlayerScores {
+  player1: PlayerScore;
+  player2: PlayerScore;
+}
+
+// Statically type the playerScores object using the PlayerScores interface
+const playerScores: PlayerScores = {
   player1: {
     current: 0,
     actual: 0,
@@ -177,13 +188,38 @@ const scoreLogicHoldButton = (player: number) => {
   }
 };
 
+// function for whoever wins!
+const winner = (active: HTMLParagraphElement | null) =>
+  active && active.classList.add(`player--winner`);
+
 // Hold Button Logic
 if (holdButton) {
   holdButton.addEventListener(`click`, (): void => {
     if (activePlayer1?.classList.contains(`player--active`)) {
       scoreLogicHoldButton(1);
+
+      // winner logic player 1
+      if (playerScores.player1.actual >= 20) {
+        winner(activePlayer1);
+        // reset other player scores to zero
+        playerScores.player2.current = 0;
+        playerScores.player2.actual = 0;
+        updateCurrentScore(playerScores.player2.current, 1);
+        updateActualScore(playerScores.player2.actual, 1);
+      }
     } else {
       scoreLogicHoldButton(2);
+
+      // winner logic player 2
+      if (playerScores.player2.actual >= 20) {
+        winner(activePlayer2);
+
+        // reset other player scores to zero
+        playerScores.player1.current = 0;
+        playerScores.player1.actual = 0;
+        updateCurrentScore(playerScores.player1.current, 0);
+        updateActualScore(playerScores.player1.actual, 0);
+      }
     }
   });
 }

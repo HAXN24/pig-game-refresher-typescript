@@ -1,5 +1,5 @@
 "use strict";
-// TODO: FIX active player logic, FIX actual score sum
+// TODO: New game logic, Winner of game logic
 // function to randomize number
 function getRandomInt(min, max) {
     min = Math.ceil(min);
@@ -37,7 +37,7 @@ const updateCurrentScore = (currScore, player) => {
 const removeActivePlayer = (active) => active && active.classList.remove(`player--active`);
 // add active player
 const addActivePlayer = (active) => active && active.classList.add(`player--active`);
-// object variable for player 1 scores
+// Statically type the playerScores object using the PlayerScores interface
 const playerScores = {
     player1: {
         current: 0,
@@ -136,14 +136,34 @@ const scoreLogicHoldButton = (player) => {
         addActivePlayer(activePlayer1);
     }
 };
+// function for whoever wins!
+const winner = (active) => active && active.classList.add(`player--winner`);
 // Hold Button Logic
 if (holdButton) {
     holdButton.addEventListener(`click`, () => {
         if (activePlayer1 === null || activePlayer1 === void 0 ? void 0 : activePlayer1.classList.contains(`player--active`)) {
             scoreLogicHoldButton(1);
+            // winner logic player 1
+            if (playerScores.player1.actual >= 20) {
+                winner(activePlayer1);
+                // reset other player scores to zero
+                playerScores.player2.current = 0;
+                playerScores.player2.actual = 0;
+                updateCurrentScore(playerScores.player2.current, 1);
+                updateActualScore(playerScores.player2.actual, 1);
+            }
         }
         else {
             scoreLogicHoldButton(2);
+            // winner logic player 2
+            if (playerScores.player2.actual >= 20) {
+                winner(activePlayer2);
+                // reset other player scores to zero
+                playerScores.player1.current = 0;
+                playerScores.player1.actual = 0;
+                updateCurrentScore(playerScores.player1.current, 0);
+                updateActualScore(playerScores.player1.actual, 0);
+            }
         }
     });
 }
