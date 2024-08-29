@@ -1,4 +1,4 @@
-// TODO: New game logic, Winner of game logic
+// TODO: New game logic,
 
 // function to randomize number
 function getRandomInt(min: number, max: number): number {
@@ -91,7 +91,7 @@ const playerScores: PlayerScores = {
     actual: 0,
   },
 };
-const updateScores = (player: number) => {
+const resetScores = (player: number) => {
   // initialize current and actual score back to 0
   if (player === 1) {
     playerScores.player1.current = 0;
@@ -128,7 +128,7 @@ if (rollDiceButton) {
           diceImage.setAttribute('src', 'dice-1.png');
 
           // initialize current and actual score back to 0
-          updateScores(1);
+          resetScores(1);
           addActivePlayer(activePlayer2);
         } else {
           diceImage.setAttribute('src', `dice-${initiateRandomNum}.png`);
@@ -150,7 +150,7 @@ if (rollDiceButton) {
           updateActualScore(playerScores.player2.actual, 1);
 
           // initialize current and actual score back to 0
-          updateScores(2);
+          resetScores(2);
           addActivePlayer(activePlayer1);
         } else {
           diceImage.setAttribute('src', `dice-${initiateRandomNum}.png`);
@@ -202,10 +202,7 @@ if (holdButton) {
       if (playerScores.player1.actual >= 20) {
         winner(activePlayer1);
         // reset other player scores to zero
-        playerScores.player2.current = 0;
-        playerScores.player2.actual = 0;
-        updateCurrentScore(playerScores.player2.current, 1);
-        updateActualScore(playerScores.player2.actual, 1);
+        resetScores(2);
       }
     } else {
       scoreLogicHoldButton(2);
@@ -215,11 +212,29 @@ if (holdButton) {
         winner(activePlayer2);
 
         // reset other player scores to zero
-        playerScores.player1.current = 0;
-        playerScores.player1.actual = 0;
-        updateCurrentScore(playerScores.player1.current, 0);
-        updateActualScore(playerScores.player1.actual, 0);
+        resetScores(1);
       }
+    }
+  });
+}
+
+// new game logic
+const newGameButton: HTMLButtonElement | null =
+  document.querySelector('.btn--new');
+
+if (newGameButton) {
+  newGameButton.addEventListener(`click`, (): void => {
+    resetScores(1);
+    resetScores(2);
+    activePlayer1?.classList.remove('player--winner');
+    activePlayer2?.classList.remove('player--winner');
+
+    if (activePlayer1?.classList.contains('player--active')) {
+      removeActivePlayer(activePlayer1);
+      addActivePlayer(activePlayer2);
+    } else if (activePlayer2?.classList.contains('player--active')) {
+      removeActivePlayer(activePlayer2);
+      addActivePlayer(activePlayer1);
     }
   });
 }
