@@ -12,33 +12,57 @@ const diceImage = document.querySelector('.dice');
 diceImage === null || diceImage === void 0 ? void 0 : diceImage.classList.add('hidden');
 // rollDice Button
 const rollDiceButton = document.querySelector('.btn--roll');
+// hold Button
+const holdButton = document.querySelector('.btn--hold');
 // currentScorePlayer1
 const currentScore0 = document.querySelector('.current-score#current--0');
 // currentScorePlayer2
 const currentScore1 = document.querySelector('.current-score#current--1');
 // Player 1
-const activePlayer0 = document.querySelector(`.player.player--0`);
+const activePlayer1 = document.querySelector(`.player.player--0`);
 //Player 2
-const activePlayer1 = document.querySelector(`.player.player--1`);
+const activePlayer2 = document.querySelector(`.player.player--1`);
 // function to update actual score
 const updateActualScore = (actualScore, player) => {
     const actualScoreElement = document.querySelector(`.score#score--${player}`);
     return (actualScoreElement && (actualScoreElement.textContent = String(actualScore)));
 };
 // function to update current score
-const updateCurrentScore = (currScore) => currentScore0 && (currentScore0.textContent = String(currScore));
+const updateCurrentScore = (currScore, player) => {
+    // currentScorePlayer1
+    const currentScoreElement = document.querySelector(`.current-score#current--${player}`);
+    return (currentScoreElement && (currentScoreElement.textContent = String(currScore)));
+};
 // remove Active Player
 const removeActivePlayer = (active) => active && active.classList.remove(`player--active`);
 // add active player
 const addActivePlayer = (active) => active && active.classList.add(`player--active`);
-// variable for currentScorePlayer1
-let currentScorePlayer1 = 0;
-// variable for actualScorePlayer1
-let actualScorePlayer1 = 0;
-// variable for currentScorePlayer2
-let currentScorePlayer2 = 0;
-// variable for actualScorePlayer1
-let actualScorePlayer2 = 0;
+// object variable for player 1 scores
+const playerScores = {
+    player1: {
+        current: 0,
+        actual: 0,
+    },
+    player2: {
+        current: 0,
+        actual: 0,
+    },
+};
+const updateScores = (player) => {
+    // initialize current and actual score back to 0
+    if (player === 1) {
+        playerScores.player1.current = 0;
+        playerScores.player1.actual = 0;
+        updateCurrentScore(playerScores.player1.current, 0);
+        updateActualScore(playerScores.player1.actual, 0);
+    }
+    else if (player === 2) {
+        playerScores.player2.current = 0;
+        playerScores.player2.actual = 0;
+        updateCurrentScore(playerScores.player2.current, 1);
+        updateActualScore(playerScores.player2.actual, 1);
+    }
+};
 // Roll Dice Logic
 if (rollDiceButton) {
     rollDiceButton.addEventListener(`click`, () => {
@@ -48,48 +72,78 @@ if (rollDiceButton) {
         diceImage === null || diceImage === void 0 ? void 0 : diceImage.classList.remove('hidden');
         // Change the src attribute
         if (diceImage) {
-            if (activePlayer0 === null || activePlayer0 === void 0 ? void 0 : activePlayer0.classList.contains(`player--active`)) {
-                currentScorePlayer1 += initiateRandomNum;
+            if (activePlayer1 === null || activePlayer1 === void 0 ? void 0 : activePlayer1.classList.contains(`player--active`)) {
+                playerScores.player1.current += initiateRandomNum;
                 currentScore0 &&
-                    (currentScore0.textContent = String(currentScorePlayer1));
+                    (currentScore0.textContent = String(playerScores.player1.current));
                 if (initiateRandomNum === 1) {
-                    removeActivePlayer(activePlayer0);
+                    removeActivePlayer(activePlayer1);
                     diceImage.setAttribute('src', 'dice-1.png');
-                    // add current score to actual score
-                    actualScorePlayer1 += currentScorePlayer1;
-                    // update actual score
-                    updateActualScore(actualScorePlayer1, 0);
-                    // initialize current score back to 0
-                    currentScorePlayer1 = 0;
-                    updateCurrentScore(currentScorePlayer1);
-                    addActivePlayer(activePlayer1);
+                    // initialize current and actual score back to 0
+                    updateScores(1);
+                    addActivePlayer(activePlayer2);
                 }
                 else {
                     diceImage.setAttribute('src', `dice-${initiateRandomNum}.png`);
                 }
             }
             else {
-                addActivePlayer(activePlayer1);
+                addActivePlayer(activePlayer2);
                 const initiateRandomNum = getRandomInt(1, 6);
-                currentScorePlayer2 += initiateRandomNum;
+                playerScores.player2.current += initiateRandomNum;
                 currentScore1 &&
-                    (currentScore1.textContent = String(currentScorePlayer2));
+                    (currentScore1.textContent = String(playerScores.player2.current));
                 if (initiateRandomNum === 1) {
-                    removeActivePlayer(activePlayer1);
+                    removeActivePlayer(activePlayer2);
                     diceImage.setAttribute('src', 'dice-1.png');
                     // add current score to actual score
-                    actualScorePlayer2 += currentScorePlayer2;
+                    playerScores.player2.current += playerScores.player2.actual;
                     // update actual score
-                    updateActualScore(actualScorePlayer2, 1);
-                    // initialize current score back to 0
-                    currentScorePlayer2 = 0;
-                    updateCurrentScore(currentScorePlayer2);
-                    addActivePlayer(activePlayer0);
+                    updateActualScore(playerScores.player2.actual, 1);
+                    // initialize current and actual score back to 0
+                    updateScores(2);
+                    addActivePlayer(activePlayer1);
                 }
                 else {
                     diceImage.setAttribute('src', `dice-${initiateRandomNum}.png`);
                 }
             }
+        }
+    });
+}
+// function for hold button logic
+const scoreLogicHoldButton = (player) => {
+    if (player === 1) {
+        removeActivePlayer(activePlayer1);
+        // add current score to actual score
+        playerScores.player1.actual += playerScores.player1.current;
+        // update actual score
+        updateActualScore(playerScores.player1.actual, 0);
+        // initialize current score back to 0
+        playerScores.player1.current = 0;
+        updateCurrentScore(playerScores.player1.current, 0);
+        addActivePlayer(activePlayer2);
+    }
+    else if (player === 2) {
+        removeActivePlayer(activePlayer2);
+        // add current score to actual score
+        playerScores.player2.actual += playerScores.player2.current;
+        // update actual score
+        updateActualScore(playerScores.player2.actual, 1);
+        // initialize current score back to 0
+        playerScores.player2.current = 0;
+        updateCurrentScore(playerScores.player2.current, 1);
+        addActivePlayer(activePlayer1);
+    }
+};
+// Hold Button Logic
+if (holdButton) {
+    holdButton.addEventListener(`click`, () => {
+        if (activePlayer1 === null || activePlayer1 === void 0 ? void 0 : activePlayer1.classList.contains(`player--active`)) {
+            scoreLogicHoldButton(1);
+        }
+        else {
+            scoreLogicHoldButton(2);
         }
     });
 }
